@@ -4,7 +4,7 @@ from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
 
 mod = "mod4"
-terminal = "sakura"
+terminal = "qterminal"
 
 keys = [
     Key([mod], "j", lazy.layout.left(), desc="Move focus to left"),
@@ -43,7 +43,9 @@ keys = [
     Key([mod], "r", lazy.spawncmd(),
         desc="Spawn a command using a prompt widget"),
     Key([mod], "d", lazy.spawn("launcher.sh"), desc="launch rofi"),
-    Key([mod, "control"], "s", lazy.spawn("tkscreenshot.sh"), desc="screenshot panel"),
+    Key([mod, "control"], "s", lazy.spawn("tkscreenshot.sh"), desc="display screenshot panel"),
+    Key([mod, "control"], "p", lazy.spawn("powermenu.sh"), desc="display power panel"),
+    Key([mod], "c", lazy.spawn("code --disable-web-security"), desc="launch visual studio code"),
 ]
 
 groups = [Group(i) for i in "123456789"]
@@ -119,13 +121,13 @@ screens = [
                 space(),
                 widget.WindowName(foreground=colors[5]),
                 sep(),
-                widget.DF(visible_on_warn=False, padding=12, background=colors[8], foreground=colors[0], fontsize=8),
+                widget.DF(visible_on_warn=False, padding=12, background=colors[11], foreground=colors[0], fontsize=8),
                 sep(),
-                widget.Memory(padding=12, background=colors[9], fontsize=8, foreground=colors[0]),
+                widget.Memory(padding=12, background=colors[10], fontsize=8, foreground=colors[0]),
                 sep(),
-                widget.CPU(background=colors[10], fontsize=8, padding=12, foreground=colors[0]),
+                widget.CPU(background=colors[9], fontsize=8, padding=12, foreground=colors[0]),
                 sep(),
-                widget.Clock(format='%m-%d-%Y %I:%M', background=colors[11], padding=12, fontsize=8, foreground=colors[0]),
+                widget.Clock(format='%m-%d-%Y %I:%M', background=colors[8], padding=12, fontsize=8, foreground=colors[0]),
                 sep(),
                 widget.Systray(padding = 12, background = colors[3]),
                 widget.Sep(linewidth = 0, padding = 12, background = colors[3]),
