@@ -44,7 +44,7 @@ keys = [
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawncmd(),
         desc="Spawn a command using a prompt widget"),
-    Key([mod], "d", lazy.spawn("rofi -show run"), desc="launch rofi"),
+    Key([mod], "d", lazy.spawn("rofi -show run -theme ~/.config/rofi/rofi.rasi"), desc="launch rofi"),
     Key([mod, "control"], "s", lazy.spawn("tkscreenshot.sh"), desc="display screenshot panel"),
     Key([mod, "control"], "p", lazy.spawn("powermenu.sh"), desc="display power panel"),
     Key([mod], "c", lazy.spawn("code --disable-web-security"), desc="launch visual studio code"),
@@ -63,43 +63,32 @@ group_names = [("", {'layout': 'monadtall'}),
 groups = [Group(name, **kwargs) for name, kwargs in group_names]
 
 for i, (name, kwargs) in enumerate(group_names, 1):
-    keys.append(Key([mod], str(i), lazy.group[name].toscreen()))        # Switch to another group
-    keys.append(Key([mod, "shift"], str(i), lazy.window.togroup(name))) # Send current window to another group
-
-
-# groups = [Group(i) for i in "123456789"]
-# 
-'''for i in groups:
-    keys.extend([
-        Key([mod], i.name, lazy.group[i.name].toscreen(),
-            desc="Switch to group {}".format(i.name)),
-
-        Key([mod, "shift"], i.name, lazy.window.togroup(i.name, switch_group=True),
-            desc="Switch to & move focused window to group {}".format(i.name)),
-    ]) '''
+    keys.append(Key([mod], str(i), lazy.group[name].toscreen()))
+    keys.append(Key([mod, "shift"], str(i), lazy.window.togroup(name)))
 
 def init_layout_theme():
     return {"margin":10,
             "border_width":1,
-            "border_focus": "#ccffbd",
-            "border_normal": "#ffd3de"
+            "border_focus": "#a3be8c",
+            "border_normal": "#b48ead"
             }
+
 layout_theme = init_layout_theme()
 
 layouts = [
-    #layout.Columns(border_focus_stack='#ccffbd'),
+    layout.Columns(**layout_theme),
     layout.Max(**layout_theme),
     # Try more layouts by unleashing below layouts.
     layout.Stack(num_stacks=2, **layout_theme),
-    layout.Bsp(**layout_theme),
+    # layout.Bsp(**layout_theme),
     # layout.Matrix(**layout_theme),
-    layout.MonadTall(**layout_theme),
-    # layout.MonadWide(),
-    # layout.RatioTile(),
-    # layout.Tile(),
-    # layout.TreeTab(),
-    # layout.VerticalTile(),
-    # layout.Zoomy(),
+    # layout.MonadTall(**layout_theme),
+    # layout.MonadWide(**layout_theme),
+    # layout.RatioTile(**layout_theme),
+    # layout.Tile(**layout_theme),
+    # layout.TreeTab(**layout_theme),
+    # layout.VerticalTile(**layout_theme),
+     layout.Zoomy(**layout_theme),
 ]
 
 widget_defaults = dict(
@@ -108,13 +97,6 @@ widget_defaults = dict(
     padding=3,
 )
 extension_defaults = widget_defaults.copy()
-
-'''colors = [
-    "#ccffbd", "#7eca9c",
-    "#40394a", "#1c1427",
-    "#ffd3de", "#f6b8d1",
-    "#5dc0a6", "#3f8f8d"
-]'''
 
 colors = [
     "#2e3440", "#3b4252", "#434c5e", "#4c566a",
@@ -135,11 +117,10 @@ screens = [
                 widget.CurrentLayout(foreground=colors[5]),
                 space(),
                 sep(),
-                widget.GroupBox(background=colors[2], highlight_method="text", active=colors[12], disable_drag = True, rounded=False, this_current_screen_border=colors[11], inactive=colors[5], font="JetBrainsMono Nerd Font", fontsize=14),
+                widget.GroupBox(background=colors[2], highlight_method="text", active=colors[11], disable_drag = True, rounded=False, this_current_screen_border=colors[9], inactive=colors[5], font="JetBrainsMono Nerd Font", fontsize=14, urgent_alert_method="text", urgent_text=colors[8]),
                 sep(),
                 space(),
                 widget.WindowName(foreground=colors[5]),
-                #widget.NetGraph(graph_color=colors[7], margin_x=8, fill_color=colors[8]),
                 sep(),
                 widget.DF(visible_on_warn=False, padding=12, background=colors[11], foreground=colors[0], fontsize=8),
                 sep(),
@@ -151,13 +132,10 @@ screens = [
                 sep(),
                 widget.TextBox(" 墳", fontsize=16, background=colors[12]),
                 widget.PulseVolume(background=colors[12], fontsize=12, padding=10) 
-                #widget.Systray(padding = 12, background = colors[3]),
-                #widget.Sep(linewidth = 0, padding = 12, background = colors[3]),
             ],
             20,
             background=colors[0],
-            opacity=0.95
-        ),
+            opacity=0.95        ),
     ),
 ]
 
@@ -190,7 +168,7 @@ reconfigure_screens = True
 
 auto_minimize = True
 
-wmname = "LG3D"
+wmname = "NORD >>> ALL"
 
 # Autostart
 @hook.subscribe.startup_once
