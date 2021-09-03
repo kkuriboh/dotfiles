@@ -1,10 +1,12 @@
 from typing import List
-from libqtile import bar, layout, widget
+from libqtile import bar, layout, widget, qtile, hook
 from libqtile.config import Click, Drag, Group, Key, Match, Screen
 from libqtile.lazy import lazy
+import os
+import subprocess
 
 mod = "mod4"
-terminal = "qterminal"
+terminal = "alacritty"
 
 keys = [
     Key([mod], "j", lazy.layout.left(), desc="Move focus to left"),
@@ -42,22 +44,39 @@ keys = [
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawncmd(),
         desc="Spawn a command using a prompt widget"),
-    Key([mod], "d", lazy.spawn("launcher.sh"), desc="launch rofi"),
+    Key([mod], "d", lazy.spawn("rofi -show run"), desc="launch rofi"),
     Key([mod, "control"], "s", lazy.spawn("tkscreenshot.sh"), desc="display screenshot panel"),
     Key([mod, "control"], "p", lazy.spawn("powermenu.sh"), desc="display power panel"),
     Key([mod], "c", lazy.spawn("code --disable-web-security"), desc="launch visual studio code"),
 ]
 
-groups = [Group(i) for i in "123456789"]
+group_names = [("", {'layout': 'monadtall'}),
+    ("", {'layout': 'monadtall'}),
+    ("", {'layout': 'monadtall'}),
+    ("", {'layout': 'monadtall'}),
+    ("ﭮ", {'layout': 'monadtall'}),
+    ("", {'layout': 'monadtall'}),
+    ("", {'layout': 'monadtall'}),
+    ("", {'layout': 'monadtall'}),
+    ("", {'layout': 'monadtall'}),]
+
+groups = [Group(name, **kwargs) for name, kwargs in group_names]
+
+for i, (name, kwargs) in enumerate(group_names, 1):
+    keys.append(Key([mod], str(i), lazy.group[name].toscreen()))        # Switch to another group
+    keys.append(Key([mod, "shift"], str(i), lazy.window.togroup(name))) # Send current window to another group
+
+
+# groups = [Group(i) for i in "123456789"]
 # 
-for i in groups:
+'''for i in groups:
     keys.extend([
         Key([mod], i.name, lazy.group[i.name].toscreen(),
             desc="Switch to group {}".format(i.name)),
 
         Key([mod, "shift"], i.name, lazy.window.togroup(i.name, switch_group=True),
             desc="Switch to & move focused window to group {}".format(i.name)),
-    ])
+    ]) '''
 
 def init_layout_theme():
     return {"margin":10,
@@ -106,20 +125,21 @@ def sep():
     return widget.Sep(linewidth=0, padding=4, background=colors[6])
 
 def space():
-    return widget.TextBox("    ")
+    return widget.TextBox("  ")
 
 screens = [
     Screen(
         top=bar.Bar(
             [
-                space(),
+                widget.TextBox(" ", foreground=colors[5], fontsize=16),
                 widget.CurrentLayout(foreground=colors[5]),
                 space(),
                 sep(),
-                widget.GroupBox(background=colors[2], borderwidth=1, active=colors[12], disable_drag = True, rounded=False, spacing=6, this_current_screen_border=colors[9], inactive=colors[5]),
+                widget.GroupBox(background=colors[2], highlight_method="text", active=colors[12], disable_drag = True, rounded=False, this_current_screen_border=colors[11], inactive=colors[5], font="JetBrainsMono Nerd Font", fontsize=14),
                 sep(),
                 space(),
                 widget.WindowName(foreground=colors[5]),
+                #widget.NetGraph(graph_color=colors[7], margin_x=8, fill_color=colors[8]),
                 sep(),
                 widget.DF(visible_on_warn=False, padding=12, background=colors[11], foreground=colors[0], fontsize=8),
                 sep(),
@@ -129,8 +149,10 @@ screens = [
                 sep(),
                 widget.Clock(format='%m-%d-%Y %I:%M', background=colors[8], padding=12, fontsize=8, foreground=colors[0]),
                 sep(),
-                widget.Systray(padding = 12, background = colors[3]),
-                widget.Sep(linewidth = 0, padding = 12, background = colors[3]),
+                widget.TextBox(" 墳", fontsize=16, background=colors[12]),
+                widget.PulseVolume(background=colors[12], fontsize=12, padding=10) 
+                #widget.Systray(padding = 12, background = colors[3]),
+                #widget.Sep(linewidth = 0, padding = 12, background = colors[3]),
             ],
             20,
             background=colors[0],
@@ -169,3 +191,9 @@ reconfigure_screens = True
 auto_minimize = True
 
 wmname = "LG3D"
+
+# Autostart
+@hook.subscribe.startup_once
+def start_once():
+    home = os.path.expanduser('~/.config/qtile/autostart.sh')
+    subprocess.call([home])
