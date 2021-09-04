@@ -2,13 +2,13 @@
 
 
 ### Screenshots
-![](https://github.com/kuribOwOh/mydotfiles/tree/main/screenshots/desktop.png)
+![](https://github.com/kuribOwOh/mydotfiles/blob/main/screenshots/desktop.png)
 
-![](https://github.com/kuribOwOh/mydotfiles/tree/main/screenshots/workflow.png)
+![](https://github.com/kuribOwOh/mydotfiles/blob/main/screenshots/workflow.png)
 
-![](https://github.com/kuribOwOh/mydotfiles/tree/main/screenshots/rofi.png)
+![](https://github.com/kuribOwOh/mydotfiles/blob/main/screenshots/rofi.png)
 
-![](https://github.com/kuribOwOh/mydotfiles/tree/main/screenshots/random.png)
+![](https://github.com/kuribOwOh/mydotfiles/blob/main/screenshots/random.png)
 
 ### Where i got some stuff
 
