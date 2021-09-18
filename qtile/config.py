@@ -6,6 +6,7 @@ import os
 import subprocess
 
 mod = "mod4"
+#terminal = "st"
 terminal = "alacritty"
 
 keys = [
@@ -39,7 +40,7 @@ keys = [
 
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
     Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
-
+    Key([mod, "shift"], "q", lazy.spawn("i3lock"), desc="screen lock"),
     Key([mod, "control"], "r", lazy.restart(), desc="Restart Qtile"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
     Key([mod], "r", lazy.spawncmd(),
@@ -47,18 +48,18 @@ keys = [
     Key([mod], "d", lazy.spawn("rofi -show run -theme ~/.config/rofi/rofi.rasi"), desc="launch rofi"),
     Key([mod, "control"], "s", lazy.spawn("tkscreenshot.sh"), desc="display screenshot panel"),
     Key([mod, "control"], "p", lazy.spawn("powermenu.sh"), desc="display power panel"),
-    Key([mod], "c", lazy.spawn("code --disable-web-security"), desc="launch visual studio code"),
+    #Key([mod], "c", lazy.spawn("code --disable-web-security"), desc="launch visual studio code"),
 ]
 
-group_names = [("", {'layout': 'monadtall'}),
-    ("", {'layout': 'monadtall'}),
-    ("", {'layout': 'monadtall'}),
-    ("", {'layout': 'monadtall'}),
-    ("ﭮ", {'layout': 'monadtall'}),
-    ("", {'layout': 'monadtall'}),
-    ("", {'layout': 'monadtall'}),
-    ("", {'layout': 'monadtall'}),
-    ("", {'layout': 'monadtall'}),]
+group_names = [("", {'layout': 'columns'}),
+    ("", {'layout': 'columns'}),
+    ("", {'layout': 'columns'}),
+    ("", {'layout': 'columns'}),
+    ("ﭮ", {'layout': 'columns'}),
+    ("", {'layout': 'columns'}),
+    ("", {'layout': 'columns'}),
+    ("", {'layout': 'columns'}),
+    ("", {'layout': 'columns'}),]
 
 groups = [Group(name, **kwargs) for name, kwargs in group_names]
 
@@ -67,7 +68,7 @@ for i, (name, kwargs) in enumerate(group_names, 1):
     keys.append(Key([mod, "shift"], str(i), lazy.window.togroup(name)))
 
 def init_layout_theme():
-    return {"margin":10,
+    return {"margin":5,
             "border_width":1,
             "border_focus": "#a3be8c",
             "border_normal": "#b48ead"
@@ -79,7 +80,7 @@ layouts = [
     layout.Columns(**layout_theme),
     layout.Max(**layout_theme),
     # Try more layouts by unleashing below layouts.
-    layout.Stack(num_stacks=2, **layout_theme),
+    #layout.Stack(num_stacks=2, **layout_theme),
     # layout.Bsp(**layout_theme),
     # layout.Matrix(**layout_theme),
     # layout.MonadTall(**layout_theme),
@@ -88,7 +89,7 @@ layouts = [
     # layout.Tile(**layout_theme),
     # layout.TreeTab(**layout_theme),
     # layout.VerticalTile(**layout_theme),
-     layout.Zoomy(**layout_theme),
+    #layout.Zoomy(**layout_theme),
 ]
 
 widget_defaults = dict(
@@ -130,7 +131,7 @@ screens = [
                 sep(),
                 widget.Clock(format='%m-%d-%Y %I:%M', background=colors[8], padding=12, fontsize=8, foreground=colors[0]),
                 sep(),
-                widget.TextBox(" 墳", fontsize=16, background=colors[12]),
+                widget.TextBox(" ", fontsize=16, background=colors[12]),
                 widget.PulseVolume(background=colors[12], fontsize=12, padding=10) 
             ],
             20,
