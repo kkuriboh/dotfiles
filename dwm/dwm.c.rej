@@ -1,0 +1,20 @@
+--- dwm.c	Mon Feb 24 21:41:55 2020
++++ dwm.c	Mon Feb 24 21:48:42 2020
+@@ -242,6 +243,7 @@
+ static int xerrordummy(Display *dpy, XErrorEvent *ee);
+ static int xerrorstart(Display *dpy, XErrorEvent *ee);
+ static void xinitvisual();
++static void drawroundedcorners(Client *c);
+ 
+ /* variables */
+ static const char broken[] = "broken";
+@@ -1446,6 +1500,9 @@
+ 
+ 			if (!selmon->lt[selmon->sellt]->arrange || c->isfloating)
+ 				resize(c, nx, ny, nw, nh, 1);
++
++            drawroundedcorners(c);
++
+ 			break;
+ 		}
+ 	} while (ev.type != ButtonRelease);
