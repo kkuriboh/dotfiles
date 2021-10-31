@@ -1,38 +1,28 @@
 /* See LICENSE file for copyright and license details. */
-//#include "/home/augusto/.cache/wal/colors-wal-dwm.h"
 
 /* appearance */
 static const unsigned int borderpx  = 0;        /* border pixel of windows */
 static const unsigned int gappx     = 5;        /* gaps between windows */
+static const int CORNER_RADIUS 		= 4;
 static const unsigned int snap      = 32;       /* snap pixel */
-static const int CORNER_RADIUS 		= 6;
 static const int showbar            = 1;        /* 0 means no bar */
-static const int topbar             = 0;        /* 0 means bottom bar */
-static const char *fonts[]          = { "Source Code Pro:size=8", "JetBrainsMono Nerd Font Mono" };
+static const int topbar             = 1;        /* 0 means bottom bar */
+static const char *fonts[]          = { "Source Code Pro:size=10", "JetBrainsMono Nerd Font Mono" };
 static const char dmenufont[]       = "monospace:size=10";
-
-static const char norm_fg[] = "#f5dc9d";
-static const char norm_bg[] = "#120512";
-static const char norm_border[] = "#ab9a6d";
-
-static const char sel_fg[] = "#f5dc9d";
-static const char sel_bg[] = "#6C4B4D";
-static const char sel_border[] = "#f5dc9d";
-
-static const char urg_fg[] = "#f5dc9d";
-static const char urg_bg[] = "#4B1C49";
-static const char urg_border[] = "#4B1C49";
-
-
+static const char col_gray1[]       = "#222222";
+static const char col_gray2[]       = "#444444";
+static const char col_gray3[]       = "#bbbbbb";
+static const char col_gray4[]       = "#eeeeee";
+static const char col_cyan[]        = "#005577";
 static const char *colors[][3]      = {
-	//              fg         bg         border   
-	[SchemeNorm] = { norm_fg, norm_bg, urg_bg },
-	[SchemeSel]  = { norm_fg, norm_bg,  norm_bg  },
-	[SchemeStatus]  = { urg_bg, urg_bg,  "#000000"  }, // Statusbar right {text,background,not used but cannot be empty}
-	[SchemeTagsSel]  = { norm_fg, norm_bg,  "#000000"  }, // Tagbar left selected {text,background,not used but cannot be empty}
-    [SchemeTagsNorm]  = { urg_bg, urg_bg,  "#000000"  }, // Tagbar left unselected {text,background,not used but cannot be empty}
-    [SchemeInfoSel]  = { norm_fg, norm_bg,  "#000000"  }, // infobar middle  selected {text,background,not used but cannot be empty}
-    [SchemeInfoNorm]  = { urg_bg, urg_bg,  "#000000"  }, // infobar middle  unselected {text,background,not used but cannot be empty}
+	/*               fg         bg         border   */
+	[SchemeNorm] = { "#ebdbb2", "#282828", "#282828" },
+	[SchemeSel]  = { "#ebdbb2", "#282828", "#282828"  },
+	[SchemeStatus]  = {"#ebdbb2", "#282828", "#282828"  }, // Statusbar right {text,background,not used but cannot be empty}
+	[SchemeTagsSel]  = { "#83a598", "#3c3836",  "#83a598"  }, // Tagbar left selected {text,background,not used but cannot be empty}
+    [SchemeTagsNorm]  = {"#ebdbb2", "#282828", "#282828"  }, // Tagbar left unselected {text,background,not used but cannot be empty}
+    [SchemeInfoSel]  = { "#8ec07c", "#282828", "#458588"  }, // infobar middle  selected {text,background,not used but cannot be empty}
+    [SchemeInfoNorm]  = {"#8ec07c", "#282828", "#458588"  }, // infobar middle  unselected {text,background,not used but cannot be empty}
 };
 
 /* tagging */
@@ -43,17 +33,15 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class      instance    title       tags mask     iscentered   isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       0,            0,           1,           -1 },
-	{ "Firefox",  NULL,       NULL,       0,			0,           0,           -1 },
+	/* class      instance    title       tags mask     isfloating   monitor */
+	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
+	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
 };
 
 /* layout(s) */
 static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
 static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
-static const int decorhints  = 1;    /* 1 means respect decoration hints */
-static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
@@ -75,8 +63,7 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-fn", dmenufont, "-nb", "#282828", "-nf", "#928374", "-sb", "#3c3836", "-sf", "#a89984", "-h", "22", NULL }; 
-//static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", urg_bg, "-nf", urg_bg, "-sb", norm_bg, "-sf", norm_fg, NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "st", NULL };
 
 static Key keys[] = {
