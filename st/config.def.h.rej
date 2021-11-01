@@ -1,10 +1,10 @@
 --- config.def.h
 +++ config.def.h
-@@ -114,6 +117,7 @@ static const char *colorname[] = {
- 	/* more colors can be added after 255 to use with DefaultXX */
- 	"#cccccc",
- 	"#555555",
-+	"black",
+@@ -178,6 +178,7 @@ static Shortcut shortcuts[] = {
+ 	{ TERMMOD,              XK_Y,           selpaste,       {.i =  0} },
+ 	{ ShiftMask,            XK_Insert,      selpaste,       {.i =  0} },
+ 	{ TERMMOD,              XK_Num_Lock,    numlock,        {.i =  0} },
++	{ TERMMOD,              XK_Return,      newterm,        {.i =  0} },
  };
  
- 
+ /*

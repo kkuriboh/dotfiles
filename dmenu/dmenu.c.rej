@@ -1,0 +1,10 @@
+--- dmenu.c
++++ dmenu.c
+@@ -36,6 +38,7 @@ struct item {
+ 	int out;
+ };
+ 
++static char numbers[NUMBERSBUFSIZE] = "";
+ static char text[BUFSIZ] = "";
+ static char *embed;
+ static int bh, mw, mh;
