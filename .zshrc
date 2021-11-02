@@ -101,7 +101,7 @@ source $ZSH/oh-my-zsh.sh
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 # mon rayquaza
 export PATH=/home/augusto/.local/bin:/home/augusto/.local/bin:/home/augusto/.cargo/bin:/bedrock/cross/pin/bin:/bedrock/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/usr/local/games:/usr/games:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/bedrock/cross/bin
-neofetch
+# neofetch
 source ~/.config/antigen.zsh
 antigen use oh-my-zsh
 
@@ -114,3 +114,6 @@ antigen bundle zsh-users/zsh-autosuggestions
 # antigen bundle SinaKhalili/sina
 
 antigen apply
+
+#kanye-said | lolcat -f
+neofetch | lolcat -f
