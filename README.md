@@ -1,35 +1,30 @@
-# My dotfiles
+# my dotfiles
 
+### qtile screenshots
 
-### Screenshots
-![](https://github.com/kuribOwOh/mydotfiles/blob/main/screenshots/desktop.png)
+![](./screenshots/desktop.png)
 
-![](https://github.com/kuribOwOh/mydotfiles/blob/main/screenshots/workflow.png)
+![](./screenshots/workflow.png)
 
-![](https://github.com/kuribOwOh/mydotfiles/blob/main/screenshots/rofi.png)
+![](./screenshots/rofi.png)
 
-![](https://github.com/kuribOwOh/mydotfiles/blob/main/screenshots/random.png)
+![](./screenshots/random.png)
 
-### Where i got some stuff
+### where i got some stuff
 
 [rofi theme](https://github.com/undiabler/nord-rofi-theme)
 
-[alacritty color schemes nord/gruvbox](https://github.com/alacritty/alacritty/wiki/Color-schemes)
+[alacritty colorschemes nord/gruvbox](https://github.com/alacritty/alacritty/wiki/Color-schemes)
 
 [wallpapers](https://github.com/linuxdotexe/nordic-wallpapers)
 
-### My apps
-1. Terminal:  
-  I use alacritty(some times i change to st) as my main terminal and in my laptop I use sakura.
-2. Text editor / IDE:
-  Neovim with NvChad is my main text editor, but sometimes I prefer to use VSCode for practicity.
-3. Browser:
-  I only use firefox and brave.
-4. WM:
-  Qtile and thinking about leftwm
-5. OS:
-  ArchLabs for my desktop and Debian for my laptop.
-6. Extras:
-  I use barrier too, so I can use the same mouse and keyboard on both computers. 
-##### *That is the end probably*
+### apps
 
+1. Terminal: Alacritty / ST.
+2. Text editor: neovim with neovide.
+3. Browser: Firefox/LibreWolf.
+4. App launcher: dmenu.
+5. WM: Qtile / DWM / river.
+6. OS: Artix.
+
+##### _That is the end probably_

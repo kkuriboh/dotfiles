@@ -28,17 +28,15 @@
 #define NUMBERSBUFSIZE        (NUMBERSMAXDIGITS * 2) + 1
 
 /* enums */
-enum { SchemeNorm, SchemeSel, SchemeHp, SchemeOut, SchemeLast }; /* color schemes */
+enum { SchemeNorm, SchemeSel, SchemeOut, SchemeLast }; /* color schemes */
 
 struct item {
 	char *text;
 	struct item *left, *right;
-	int out, hp;
+	int out;
 };
 
 static char numbers[NUMBERSBUFSIZE] = "";
-static char **hpitems = NULL;
-static int hplength = 0;
 static char text[BUFSIZ] = "";
 static char *embed;
 static int bh, mw, mh;
@@ -60,38 +58,9 @@ static Clr *scheme[SchemeLast];
 
 #include "config.h"
 
-static int (*fstrncmp)(const char *, const char *, size_t) = strncmp;
-static char *(*fstrstr)(const char *, const char *) = strstr;
-
-static char**
-tokenize(char *source, const char *delim, int *llen) {
-	int listlength = 0;
-	char **list = malloc(1 * sizeof(char*));
-	char *token = strtok(source, delim);
-
-	while (token) {
-		if (!(list = realloc(list, sizeof(char*) * (listlength + 1))))
-			die("Unable to realloc %d bytes\n", sizeof(char*) * (listlength + 1));
-		if (!(list[listlength] = strdup(token)))
-			die("Unable to strdup %d bytes\n", strlen(token) + 1);
-		token = strtok(NULL, delim);
-		listlength++;
-	}
-
-	*llen = listlength;
-	return list;
-}
-
-static int
-arrayhas(char **list, int length, char *item) {
-	for (int i = 0; i < length; i++) {
-		int len1 = strlen(list[i]);
-		int len2 = strlen(item);
-		if (fstrncmp(list[i], item, len1 > len2 ? len2 : len1) == 0)
-			return 1;
-	}
-	return 0;
-}
+static char * cistrstr(const char *s, const char *sub);
+static int (*fstrncmp)(const char *, const char *, size_t) = strncasecmp;
+static char *(*fstrstr)(const char *, const char *) = cistrstr;
 
 static void
 appenditem(struct item *item, struct item **list, struct item **last)
@@ -124,15 +93,6 @@ calcoffsets(void)
 			break;
 }
 
-static int
-max_textw(void)
-{
-	int len = 0;
-	for (struct item *item = items; item && item->text; item++)
-		len = MAX(TEXTW(item->text), len);
-	return len;
-}
-
 static void
 cleanup(void)
 {
@@ -147,13 +107,20 @@ cleanup(void)
 }
 
 static char *
-cistrstr(const char *s, const char *sub)
+cistrstr(const char *h, const char *n)
 {
-	size_t len;
+	size_t i;
 
-	for (len = strlen(sub); *s; s++)
-		if (!strncasecmp(s, sub, len))
-			return (char *)s;
+	if (!n[0])
+		return (char *)h;
+
+	for (; *h; ++h) {
+		for (i = 0; n[i] && tolower((unsigned char)n[i]) ==
+		            tolower((unsigned char)h[i]); ++i)
+			;
+		if (n[i] == '\0')
+			return (char *)h;
+	}
 	return NULL;
 }
 
@@ -162,8 +129,6 @@ drawitem(struct item *item, int x, int y, int w)
 {
 	if (item == sel)
 		drw_setscheme(drw, scheme[SchemeSel]);
-	else if (item->hp)
-		drw_setscheme(drw, scheme[SchemeHp]);
 	else if (item->out)
 		drw_setscheme(drw, scheme[SchemeOut]);
 	else
@@ -289,7 +254,7 @@ match(void)
 	char buf[sizeof text], *s;
 	int i, tokc = 0;
 	size_t len, textsize;
-	struct item *item, *lhpprefix, *lprefix, *lsubstr, *hpprefixend, *prefixend, *substrend;
+	struct item *item, *lprefix, *lsubstr, *prefixend, *substrend;
 
 	strcpy(buf, text);
 	/* separate input text into tokens to be matched individually */
@@ -298,7 +263,7 @@ match(void)
 			die("cannot realloc %u bytes:", tokn * sizeof *tokv);
 	len = tokc ? strlen(tokv[0]) : 0;
 
-	matches = lhpprefix = lprefix = lsubstr = matchend = hpprefixend = prefixend = substrend = NULL;
+	matches = lprefix = lsubstr = matchend = prefixend = substrend = NULL;
 	textsize = strlen(text) + 1;
 	for (item = items; item && item->text; item++) {
 		for (i = 0; i < tokc; i++)
@@ -306,23 +271,13 @@ match(void)
 				break;
 		if (i != tokc) /* not all tokens match */
 			continue;
-		/* exact matches go first, then prefixes with high priority, then prefixes, then substrings */
+		/* exact matches go first, then prefixes, then substrings */
 		if (!tokc || !fstrncmp(text, item->text, textsize))
 			appenditem(item, &matches, &matchend);
-		else if (item->hp && !fstrncmp(tokv[0], item->text, len))
-			appenditem(item, &lhpprefix, &hpprefixend);
 		else if (!fstrncmp(tokv[0], item->text, len))
 			appenditem(item, &lprefix, &prefixend);
 		else
 			appenditem(item, &lsubstr, &substrend);
-	}
-	if (lhpprefix) {
-		if (matches) {
-			matchend->right = lhpprefix;
-			lhpprefix->left = matchend;
-		} else
-			matches = lhpprefix;
-		matchend = hpprefixend;
 	}
 	if (lprefix) {
 		if (matches) {
@@ -391,6 +346,8 @@ keypress(XKeyEvent *ev)
 	int len;
 	KeySym ksym;
 	Status status;
+	int i, offscreen = 0;
+	struct item *tmpsel;
 
 	len = XmbLookupString(xic, ev, buf, sizeof buf, &ksym, &status);
 	switch (status) {
@@ -440,9 +397,11 @@ keypress(XKeyEvent *ev)
 			                  utf8, utf8, win, CurrentTime);
 			return;
 		case XK_Left:
+		case XK_KP_Left:
 			movewordedge(-1);
 			goto draw;
 		case XK_Right:
+		case XK_KP_Right:
 			movewordedge(+1);
 			goto draw;
 		case XK_Return:
@@ -480,6 +439,7 @@ insert:
 			insert(buf, len);
 		break;
 	case XK_Delete:
+	case XK_KP_Delete:
 		if (text[cursor] == '\0')
 			return;
 		cursor = nextrune(+1);
@@ -490,6 +450,7 @@ insert:
 		insert(NULL, nextrune(-1) - cursor);
 		break;
 	case XK_End:
+	case XK_KP_End:
 		if (text[cursor] != '\0') {
 			cursor = strlen(text);
 			break;
@@ -509,6 +470,7 @@ insert:
 		cleanup();
 		exit(1);
 	case XK_Home:
+	case XK_KP_Home:
 		if (sel == matches) {
 			cursor = 0;
 			break;
@@ -517,6 +479,28 @@ insert:
 		calcoffsets();
 		break;
 	case XK_Left:
+		    if (columns > 1) {
+			    if (!sel)
+				    return;
+			    tmpsel = sel;
+			    for (i = 0; i < lines; i++) {
+				    if (!tmpsel->left || tmpsel->left->right != tmpsel) {
+					    if (offscreen)
+						    break;
+					    return;
+				    }
+				    if (tmpsel == curr)
+					    offscreen = 1;
+				    tmpsel = tmpsel->left;
+			    }
+			    sel = tmpsel;
+		    	if (offscreen) {
+      				curr = prev;
+	    			calcoffsets();
+		    	}
+	    		break;
+    		}
+	case XK_KP_Left:
 		if (cursor > 0 && (!sel || !sel->left || lines > 0)) {
 			cursor = nextrune(-1);
 			break;
@@ -525,18 +509,21 @@ insert:
 			return;
 		/* fallthrough */
 	case XK_Up:
+	case XK_KP_Up:
 		if (sel && sel->left && (sel = sel->left)->right == curr) {
 			curr = prev;
 			calcoffsets();
 		}
 		break;
 	case XK_Next:
+	case XK_KP_Next:
 		if (!next)
 			return;
 		sel = curr = next;
 		calcoffsets();
 		break;
 	case XK_Prior:
+	case XK_KP_Prior:
 		if (!prev)
 			return;
 		sel = curr = prev;
@@ -553,6 +540,28 @@ insert:
 			sel->out = 1;
 		break;
 	case XK_Right:
+    		if (columns > 1) {
+    			if (!sel)
+    				return;
+    			tmpsel = sel;
+    			for (i = 0; i < lines; i++) {
+    				if (!tmpsel->right ||  tmpsel->right->left != tmpsel) {
+    					if (offscreen)
+    						break;
+    					return;
+    				}
+    				tmpsel = tmpsel->right;
+    				if (tmpsel == next)
+    					offscreen = 1;
+    			}
+    			sel = tmpsel;
+    			if (offscreen) {
+    				curr = next;
+    				calcoffsets();
+    			}
+    			break;
+    		}
+	case XK_KP_Right:
 		if (text[cursor] != '\0') {
 			cursor = nextrune(+1);
 			break;
@@ -561,6 +570,7 @@ insert:
 			return;
 		/* fallthrough */
 	case XK_Down:
+	case XK_KP_Down:
 		if (sel && sel->right && (sel = sel->right) == next) {
 			curr = next;
 			calcoffsets();
@@ -615,7 +625,6 @@ readstdin(void)
 		if (!(items[i].text = strdup(buf)))
 			die("cannot strdup %u bytes:", strlen(buf) + 1);
 		items[i].out = 0;
-		items[i].hp = arrayhas(hpitems, hplength, items[i].text);
 		drw_font_getexts(drw->fonts, buf, strlen(buf), &tmpmax, NULL);
 		if (tmpmax > inputw) {
 			inputw = tmpmax;
@@ -692,7 +701,6 @@ setup(void)
 	bh = drw->fonts->h + 2;
 	lines = MAX(lines, 0);
 	mh = (lines + 1) * bh;
-	promptw = (prompt && *prompt) ? TEXTW(prompt) - lrpad / 4 : 0;
 #ifdef XINERAMA
 	i = 0;
 	if (parentwin == root && (info = XineramaQueryScreens(dpy, &n))) {
@@ -719,9 +727,9 @@ setup(void)
 				if (INTERSECT(x, y, 1, 1, info[i]))
 					break;
 
-		mw = MIN(MAX(max_textw() + promptw, 100), info[i].width);
-		x = info[i].x_org + ((info[i].width  - mw) / 2);
-		y = info[i].y_org + ((info[i].height - mh) / 2);
+		x = info[i].x_org + 200;
+		y = info[i].y_org + (topbar ? 0 : info[i].height - mh);
+		mw = info[i].width - 400;
 		XFree(info);
 	} else
 #endif
@@ -729,10 +737,11 @@ setup(void)
 		if (!XGetWindowAttributes(dpy, parentwin, &wa))
 			die("could not get embedding window attributes: 0x%lx",
 			    parentwin);
-		mw = MIN(MAX(max_textw() + promptw, 100), wa.width);
-		x = (wa.width  - mw) / 2;
-		y = (wa.height - mh) / 2;
+		x = 0;
+		y = topbar ? 0 : wa.height - mh;
+		mw = wa.width;
 	}
+	promptw = (prompt && *prompt) ? TEXTW(prompt) - lrpad / 4 : 0;
 	inputw = MIN(inputw, mw/3);
 	match();
 
@@ -772,8 +781,7 @@ static void
 usage(void)
 {
 	fputs("usage: dmenu [-bfiv] [-l lines] [-p prompt] [-fn font] [-m monitor]\n"
-	      "             [-nb color] [-nf color] [-sb color] [-sf color] [-w windowid]\n"
-		  "             [-hb color] [-hf color] [-hp items]\n", stderr);
+	      "             [-nb color] [-nf color] [-sb color] [-sf color] [-w windowid]\n", stderr);
 	exit(1);
 }
 
@@ -792,9 +800,9 @@ main(int argc, char *argv[])
 			topbar = 0;
 		else if (!strcmp(argv[i], "-f"))   /* grabs keyboard before reading stdin */
 			fast = 1;
-		else if (!strcmp(argv[i], "-i")) { /* case-insensitive item matching */
-			fstrncmp = strncasecmp;
-			fstrstr = cistrstr;
+		else if (!strcmp(argv[i], "-s")) { /* case-sensitive item matching */
+			fstrncmp = strncmp;
+			fstrstr = strstr;
 		} else if (i + 1 == argc)
 			usage();
 		/* these options take one argument */
@@ -818,14 +826,8 @@ main(int argc, char *argv[])
 			colors[SchemeSel][ColBg] = argv[++i];
 		else if (!strcmp(argv[i], "-sf"))  /* selected foreground color */
 			colors[SchemeSel][ColFg] = argv[++i];
-		else if (!strcmp(argv[i], "-hb"))  /* high priority background color */
-			colors[SchemeHp][ColBg] = argv[++i];
-		else if (!strcmp(argv[i], "-hf")) /* low priority background color */
-			colors[SchemeHp][ColFg] = argv[++i];
 		else if (!strcmp(argv[i], "-w"))   /* embedding window id */
 			embed = argv[++i];
-		else if (!strcmp(argv[i], "-hp"))
-			hpitems = tokenize(argv[++i], ",", &hplength);
 		else
 			usage();
 

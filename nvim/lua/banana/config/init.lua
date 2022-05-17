@@ -1,0 +1,17 @@
+require('banana.config.indent_blankline')
+require('banana.config.treesitter')
+require('banana.config.lsp')
+require('banana.config.cmp')
+require('banana.config.nvim_tree')
+require('banana.config.telescope')
+require('banana.config.gh_copilot')
+require('banana.config.presence')
+require('banana.config.lualine')
+require('banana.config.dashboard')
+require('banana.config.formatter')
+require('banana.config.comment')
+
+-- no config --
+require('colorizer').setup()
+require('nvim-autopairs').setup()
+require('lsp_signature').setup()
