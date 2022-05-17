@@ -1,0 +1,15 @@
+#!/bin/env lua
+local options = "fullscreen\nfullscreen-clipboard\nselect\nselect-clipboard"
+
+local choice = io.popen("echo '"..options.."' | dmenu -g 1 -l 4 -p "):read'*all'
+choice = string.gsub(choice, "%s", "")
+
+if choice == "fullscreen" then
+    os.execute("scrot -d 1 ~/Pictures/screenshots/print.png")
+elseif choice == "fullscreen-clipboard" then
+    os.execute("scrot -e 'xclip -selection clipboard -t image/png -i $f' /tmp/screenshot.png")
+elseif choice == "select" then
+    os.execute("scrot -d 1 -s -f ~/Pictures/screenshots/print.png")
+elseif choice == "select-clipboard" then
+    os.execute("scrot -s -e 'xclip -selection clipboard -t image/png -i $f' /tmp/screenshot.png")
+end
