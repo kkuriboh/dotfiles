@@ -2,52 +2,51 @@ local function prettier()
 	return {
 		exe = "prettier",
 		args = { vim.api.nvim_buf_get_name(0) },
-		stdin = true
+		stdin = true,
 	}
 end
 
-require('formatter').setup({
+require("formatter").setup({
 	logging = false,
 	filetype = {
 		javascript = {
-			prettier
+			prettier,
 		},
 		typescript = {
-			prettier
+			prettier,
 		},
 		typescriptreact = {
-			prettier
+			prettier,
 		},
 		css = {
-			prettier
+			prettier,
 		},
 		html = {
-			prettier
+			prettier,
 		},
 		json = {
-			prettier
+			prettier,
 		},
 		rust = {
 			function()
 				return {
 					exe = "rustfmt",
 					args = { "--emit=stdout", "--edition=2021" },
-					stdin = true
+					stdin = true,
 				}
-			end
+			end,
 		},
 		lua = {
 			function()
 				return {
 					exe = "stylua",
 					args = {
-						"--config-path "
-						.. "$HOME/.config/stylua/stylua.toml",
-						"-"
+						"--config-path " .. "$HOME/.config/stylua/stylua.toml",
+						"-",
 					},
-					stdin = true
+					stdin = true,
 				}
-			end
-		}
-	}
+			end,
+		},
+	},
 })

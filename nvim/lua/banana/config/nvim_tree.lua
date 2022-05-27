@@ -1,15 +1,15 @@
-require('nvim-tree').setup{
-	disable_netrw        = false,
-	hijack_netrw         = true,
-	open_on_setup        = true,
+require("nvim-tree").setup({
+	disable_netrw = false,
+	hijack_netrw = true,
+	open_on_setup = true,
 	ignore_buffer_on_setup = false,
-	ignore_ft_on_setup   = {},
+	ignore_ft_on_setup = {},
 	auto_reload_on_write = true,
-	open_on_tab          = false,
-	hijack_cursor        = false,
-	update_cwd           = true,
+	open_on_tab = false,
+	hijack_cursor = false,
+	update_cwd = true,
 	hijack_unnamed_buffer_when_opening = false,
-	hijack_directories   = {
+	hijack_directories = {
 		enable = true,
 		auto_open = false,
 	},
@@ -20,20 +20,20 @@ require('nvim-tree').setup{
 			info = "",
 			warning = "",
 			error = "",
-		}
+		},
 	},
 	update_focused_file = {
-		enable      = true,
-		update_cwd  = false,
-		ignore_list = {}
+		enable = true,
+		update_cwd = false,
+		ignore_list = {},
 	},
 	system_open = {
-		cmd  = nil,
-		args = {}
+		cmd = nil,
+		args = {},
 	},
 	filters = {
 		dotfiles = false,
-		custom = {}
+		custom = {},
 	},
 	git = {
 		enable = true,
@@ -44,19 +44,19 @@ require('nvim-tree').setup{
 		width = 30,
 		height = 30,
 		hide_root_folder = false,
-		side = 'left',
+		side = "left",
 		preserve_window_proportions = false,
 		mappings = {
 			custom_only = false,
-			list = {}
+			list = {},
 		},
 		number = false,
 		relativenumber = false,
-		signcolumn = "yes"
+		signcolumn = "yes",
 	},
 	trash = {
 		cmd = "trash",
-		require_confirm = true
+		require_confirm = true,
 	},
 	actions = {
 		change_dir = {
@@ -70,11 +70,18 @@ require('nvim-tree').setup{
 				enable = true,
 				chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",
 				exclude = {
-					filetype = { "notify", "packer", "qf", "diff", "fugitive", "fugitiveblame", },
-					buftype  = { "nofile", "terminal", "help", },
-				}
-			}
-		}
+					filetype = {
+						"notify",
+						"packer",
+						"qf",
+						"diff",
+						"fugitive",
+						"fugitiveblame",
+					},
+					buftype = { "nofile", "terminal", "help" },
+				},
+			},
+		},
 	},
 	log = {
 		enable = false,
@@ -84,4 +91,4 @@ require('nvim-tree').setup{
 			git = false,
 		},
 	},
-}
+})
