@@ -1,5 +1,13 @@
 require("nvim-treesitter.configs").setup({
-	ensure_installed = { "c", "cpp", "lua", "rust", "typescript", "tsx" },
+	ensure_installed = {
+		"c",
+		"cpp",
+		"lua",
+		"rust",
+		"toml",
+		"typescript",
+		"tsx",
+	},
 
 	highlight = {
 		enable = true,

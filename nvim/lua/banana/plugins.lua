@@ -6,7 +6,6 @@ return require("packer").startup(function()
 	use("nvim-treesitter/nvim-treesitter")
 	use("L3MON4D3/LuaSnip")
 	use("mhartington/formatter.nvim")
-	use("github/copilot.vim")
 	use("andweeb/presence.nvim")
 	use("p00f/nvim-ts-rainbow")
 	use("glepnir/dashboard-nvim")
@@ -22,15 +21,13 @@ return require("packer").startup(function()
 	use("folke/twilight.nvim")
 	use("folke/tokyonight.nvim")
 	use("folke/trouble.nvim")
+	use("kyazdani42/nvim-web-devicons")
+	use("nvim-lualine/lualine.nvim")
+	use("kyazdani42/nvim-tree.lua")
 	use({
-		"nvim-lualine/lualine.nvim",
-		requires = { "kyazdani42/nvim-web-devicons", opt = true },
+		"hrsh7th/cmp-path",
+		after = "cmp-buffer",
 	})
-	use({
-		"kyazdani42/nvim-tree.lua",
-		requires = { "kyazdani42/nvim-web-devicons" },
-	})
-
 	-- lsp --
 	use({
 		"neovim/nvim-lspconfig",
@@ -47,10 +44,7 @@ return require("packer").startup(function()
 			"nvim-lua/plenary.nvim",
 			"nvim-lua/popup.nvim",
 			"nvim-telescope/telescope-fzy-native.nvim",
+			"nvim-telescope/telescope-media-files.nvim",
 		},
-	})
-	use({
-		"hrsh7th/cmp-path",
-		after = "cmp-buffer",
 	})
 end)

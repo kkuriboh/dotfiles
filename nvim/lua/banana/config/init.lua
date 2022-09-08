@@ -10,10 +10,10 @@ require("banana.config.lualine")
 require("banana.config.dashboard")
 require("banana.config.formatter")
 require("banana.config.comment")
+require("banana.config.twilight")
 
 -- no config --
 require("colorizer").setup()
 require("nvim-autopairs").setup()
 require("lsp_signature").setup()
-require("twilight").setup()
 require("trouble").setup()

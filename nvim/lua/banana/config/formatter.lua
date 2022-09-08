@@ -21,10 +21,19 @@ require("formatter").setup({
 		css = {
 			prettier,
 		},
+		scss = {
+			prettier,
+		},
 		html = {
 			prettier,
 		},
 		json = {
+			prettier,
+		},
+		yaml = {
+			prettier,
+		},
+		graphql = {
 			prettier,
 		},
 		rust = {
