@@ -19,11 +19,16 @@ return require("packer").startup(function()
 	use("windwp/nvim-ts-autotag")
 	use("lewis6991/impatient.nvim")
 	use("folke/twilight.nvim")
-	use("folke/tokyonight.nvim")
 	use("folke/trouble.nvim")
+	-- use("bluz71/vim-moonfly-colors")
+	use("folke/tokyonight.nvim")
 	use("kyazdani42/nvim-web-devicons")
 	use("nvim-lualine/lualine.nvim")
 	use("kyazdani42/nvim-tree.lua")
+	use("lervag/vimtex")
+	use("alaviss/nim.nvim")
+	use("folke/todo-comments.nvim")
+	-- use("ionide/Ionide-vim")
 	use({
 		"hrsh7th/cmp-path",
 		after = "cmp-buffer",

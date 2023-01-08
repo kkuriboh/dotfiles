@@ -7,6 +7,8 @@ require("nvim-treesitter.configs").setup({
 		"toml",
 		"typescript",
 		"tsx",
+		"zig",
+		"latex",
 	},
 
 	highlight = {

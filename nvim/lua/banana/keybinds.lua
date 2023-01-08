@@ -36,4 +36,5 @@ bind({
 	{ "r", "<cmd>lua vim.lsp.buf.rename()<CR>" },
 	{ "t", ":TroubleToggle<CR>" },
 	{ "tr", ":TroubleRefresh<CR>" },
+	{ "za", ":!zathura <C-r>=expand('%:r')<cr>.pdf &<cr>" },
 })

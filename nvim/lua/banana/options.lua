@@ -1,6 +1,5 @@
-vim.cmd.colorscheme("tokyonight")
-vim.g.tokyonight_style = "night"
-vim.o.background = "dark"
+vim.cmd.colorscheme("tokyonight-night")
+-- vim.o.background = "dark"
 vim.o.clipboard = vim.o.clipboard .. "unnamedplus"
 vim.o.laststatus = 3
 vim.opt.termguicolors = true
@@ -33,3 +32,7 @@ vim.api.nvim_create_autocmd(
 	"BufWritePost",
 	{ command = "FormatWrite", group = some_group }
 )
+--[[vim.api.nvim_create_autocmd(
+	"BufWritePost",
+	{ pattern = { "latex" }, command = ":!pdflatex", group = some_group }
+)]]

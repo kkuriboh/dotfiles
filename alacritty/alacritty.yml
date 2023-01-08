@@ -14,7 +14,7 @@ font:
         family: JetBrainsMono Nerd Font Mono
     style: Thinitalic
     size:
-        8
+        10
 scrolling:
     history: 10000
 mouse:

@@ -2,11 +2,11 @@
 
 ### qtile screenshots
 
-![](./screenshots/desktop.png)
+![desktop](./screenshots/desktop.png)
 
-![](./screenshots/workflow.png)
+![workflow](./screenshots/workflow.png)
 
-![](./screenshots/rofi.png)
+![rofi](./screenshots/rofi.png)
 
 ![](./screenshots/random.png)
 
@@ -22,9 +22,7 @@
 
 1. Terminal: Alacritty / ST.
 2. Text editor: neovim with neovide.
-3. Browser: Firefox/LibreWolf.
+3. Browser: Firefox.
 4. App launcher: dmenu.
-5. WM: Qtile / DWM / river.
-6. OS: Artix.
-
-##### _That is the end probably_
+5. WM: Qtile / DWM.
+6. OS: Artix / Void.

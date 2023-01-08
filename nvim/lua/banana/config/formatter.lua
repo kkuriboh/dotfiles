@@ -57,5 +57,18 @@ require("formatter").setup({
 				}
 			end,
 		},
+		dart = {
+			function()
+				return {
+					exe = "dart format",
+					args = {
+						vim.api.nvim_buf_get_name(0),
+						"-o show",
+						"| head -n -1",
+					},
+					stdin = true,
+				}
+			end,
+		},
 	},
 })
