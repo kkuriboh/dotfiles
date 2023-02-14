@@ -41,6 +41,24 @@ require("nvim-treesitter.configs").setup({
 			"#89dceb",
 			"#d9e0ee",
 		},
-		-- termcolors = {} -- table of colour name strings
 	},
+})
+
+local ft_to_parser = require("nvim-treesitter.parsers").filetype_to_parsername
+ft_to_parser.fsharp = "ocaml"
+
+local ts = vim.api.nvim_create_augroup("ts_langs", { clear = true })
+vim.api.nvim_create_autocmd("BufRead,BufNewFile", {
+	pattern = "*.fs,*.fsi,*.fsx,*.fsscript,*.fsl,*.fsy",
+	callback = function()
+		vim.opt_local.filetype = "fsharp"
+	end,
+	group = ts,
+})
+vim.api.nvim_create_autocmd("BufRead,BufNewFile", {
+	pattern = "*.fsproj",
+	callback = function()
+		vim.opt.filetype = "xml"
+	end,
+	group = ts,
 })

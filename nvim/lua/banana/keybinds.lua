@@ -1,11 +1,11 @@
 local map = vim.keymap.set
-local bind = function(bindlist)
+local nbind = function(bindlist)
 	for _, binding in ipairs(bindlist) do
 		map("n", binding[1], binding[2])
 	end
 end
 
-bind({
+nbind({
 	{ "<leader>e", ":NvimTreeToggle<CR>" },
 	{ "<leader>d", ":Telescope find_files<CR>" },
 	{ "<leader>a", ":Telescope grep_string<CR>" },
@@ -37,4 +37,6 @@ bind({
 	{ "t", ":TroubleToggle<CR>" },
 	{ "tr", ":TroubleRefresh<CR>" },
 	{ "za", ":!zathura <C-r>=expand('%:r')<cr>.pdf &<cr>" },
+	{ "mf", ":!touch " },
+	{ "md", ":!mkdir -p " },
 })

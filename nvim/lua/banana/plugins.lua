@@ -9,7 +9,7 @@ return require("packer").startup(function()
 	use("andweeb/presence.nvim")
 	use("p00f/nvim-ts-rainbow")
 	use("glepnir/dashboard-nvim")
-	use("simrat39/rust-tools.nvim")
+	-- use("simrat39/rust-tools.nvim")
 	use("ziglang/zig.vim")
 	use("ray-x/lsp_signature.nvim")
 	use("nathom/filetype.nvim")
@@ -20,7 +20,6 @@ return require("packer").startup(function()
 	use("lewis6991/impatient.nvim")
 	use("folke/twilight.nvim")
 	use("folke/trouble.nvim")
-	-- use("bluz71/vim-moonfly-colors")
 	use("folke/tokyonight.nvim")
 	use("kyazdani42/nvim-web-devicons")
 	use("nvim-lualine/lualine.nvim")
@@ -28,21 +27,31 @@ return require("packer").startup(function()
 	use("lervag/vimtex")
 	use("alaviss/nim.nvim")
 	use("folke/todo-comments.nvim")
-	-- use("ionide/Ionide-vim")
+	use("akinsho/flutter-tools.nvim")
+	-- use("adelarsq/neofsharp.vim")
+	use("ionide/Ionide-vim")
 	use({
-		"hrsh7th/cmp-path",
-		after = "cmp-buffer",
-	})
-	-- lsp --
-	use({
-		"neovim/nvim-lspconfig",
-		"williamboman/nvim-lsp-installer",
-		"hrsh7th/cmp-nvim-lsp",
-		"hrsh7th/cmp-buffer",
-		"hrsh7th/nvim-cmp",
+		"VonHeikemen/lsp-zero.nvim",
+		branch = "v1.x",
+		requires = {
+			{ "neovim/nvim-lspconfig" },
+			{ "williamboman/mason.nvim" },
+			{ "williamboman/mason-lspconfig.nvim" },
+
+			{ "hrsh7th/nvim-cmp" },
+			{ "hrsh7th/cmp-nvim-lsp" },
+			{ "hrsh7th/cmp-buffer" },
+			{ "hrsh7th/cmp-path" },
+			{ "saadparwaiz1/cmp_luasnip" },
+			{ "hrsh7th/cmp-nvim-lua" },
+
+			{ "L3MON4D3/LuaSnip" },
+			{ "rafamadriz/friendly-snippets" },
+
+			{ "simrat39/inlay-hints.nvim" },
+		},
 	})
 
-	-- telescope --
 	use({
 		"nvim-telescope/telescope.nvim",
 		requires = {

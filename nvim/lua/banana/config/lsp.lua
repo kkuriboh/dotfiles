@@ -1,37 +1,72 @@
-require("nvim-lsp-installer").on_server_ready(function(server)
-	local capabilities = require("cmp_nvim_lsp").default_capabilities(
-		vim.lsp.protocol.make_client_capabilities()
-	)
-	local opts = { capabilities = capabilities }
-	if server.name == "sumneko_lua" then
-		opts = vim.tbl_deep_extend("force", {
-			settings = {
-				Lua = {
-					runtime = {
-						version = "LuaJIT",
-						path = vim.split(package.path, ";"),
-					},
-					diagnostics = { globals = { "vim" } },
-					workspace = {
-						library = vim.api.nvim_get_runtime_file("", true),
-						checkThirdParty = false,
-					},
-					telemetry = { enable = false },
-				},
+local lsp = require("lsp-zero")
+local ih = require("inlay-hints")
+
+lsp.preset({
+	name = "minimal",
+	set_lsp_keymaps = true,
+	manage_nvim_cmp = true,
+	suggest_lsp_servers = false,
+})
+
+lsp.ensure_installed({
+	"tsserver",
+	"rust_analyzer",
+	"clangd",
+	"fsautocomplete",
+	"sumneko_lua",
+})
+
+lsp.configure("tsserver", {
+	on_attach = function(c, b)
+		ih.on_attach(c, b)
+	end,
+	settings = {
+		javascript = {
+			inlayHints = {
+				includeInlayEnumMemberValueHints = true,
+				includeInlayFunctionLikeReturnTypeHints = true,
+				includeInlayFunctionParameterTypeHints = true,
+				includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
+				includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+				includeInlayPropertyDeclarationTypeHints = true,
+				includeInlayVariableTypeHints = true,
 			},
-		}, opts)
-	end
-	if server.name == "rust_analyzer" then
-		require("rust-tools").setup({
-			server = vim.tbl_deep_extend(
-				"force",
-				server:get_default_options(),
-				opts
-			),
-		})
-		server:attach_buffers()
-		-- require("rust-tools").start_standalone_if_required()
-	else
-		server:setup(opts)
-	end
-end)
+		},
+		typescript = {
+			inlayHints = {
+				includeInlayEnumMemberValueHints = true,
+				includeInlayFunctionLikeReturnTypeHints = true,
+				includeInlayFunctionParameterTypeHints = true,
+				includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
+				includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+				includeInlayPropertyDeclarationTypeHints = true,
+				includeInlayVariableTypeHints = true,
+			},
+		},
+	},
+})
+
+lsp.configure("rust_analyzer", {
+	tools = {
+		on_initialized = function()
+			ih.set_all()
+		end,
+		inlay_hints = {
+			auto = false,
+		},
+	},
+	server = {
+		on_attach = function(c, b)
+			ih.on_attach(c, b)
+		end,
+	},
+})
+
+lsp.setup({
+	eol = {
+		right_align = true,
+	},
+})
+
+ih.setup()
+vim.lsp.set_log_level("debug")

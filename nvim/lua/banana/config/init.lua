@@ -7,11 +7,12 @@ require("banana.config.telescope")
 require("banana.config.presence")
 require("banana.config.lualine")
 require("banana.config.dashboard")
-require("banana.config.formatter")
 require("banana.config.comment")
 require("banana.config.twilight")
 require("banana.config.todo")
 require("banana.config.vimtex")
+require("banana.config.flutter")
+require("banana.config.formatter")
 
 -- no config --
 require("colorizer").setup()

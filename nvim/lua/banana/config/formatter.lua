@@ -1,8 +1,29 @@
+local util = require("formatter.util")
+local function get_buffername()
+	return util.escape_path(util.get_current_buffer_file_name())
+end
+
 local function prettier()
 	return {
 		exe = "prettier",
-		args = { vim.api.nvim_buf_get_name(0) },
+		args = {
+			get_buffername(),
+		},
 		stdin = true,
+	}
+end
+
+local function clang()
+	return {
+		exe = "clang-format",
+		args = {
+			"-assume-filename",
+			get_buffername(),
+			"-style",
+			"{IndentWidth: 4}",
+		},
+		stdin = true,
+		try_node_modules = true,
 	}
 end
 
@@ -45,6 +66,15 @@ require("formatter").setup({
 				}
 			end,
 		},
+		fsharp = {
+			function()
+				return {
+					exe = "fantomas",
+					args = { get_buffername(), "--out", "/dev/stdin" },
+					stdin = true,
+				}
+			end,
+		},
 		lua = {
 			function()
 				return {
@@ -62,7 +92,7 @@ require("formatter").setup({
 				return {
 					exe = "dart format",
 					args = {
-						vim.api.nvim_buf_get_name(0),
+						get_buffername(),
 						"-o show",
 						"| head -n -1",
 					},
@@ -70,5 +100,16 @@ require("formatter").setup({
 				}
 			end,
 		},
+		elixir = {
+			function()
+				return {
+					exe = "mix",
+					args = { "format", "-" },
+					stdin = true,
+				}
+			end,
+		},
+		c = { clang },
+		cpp = { clang },
 	},
 })
