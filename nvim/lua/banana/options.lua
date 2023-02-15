@@ -17,16 +17,12 @@ vim.g.did_load_filetypes = 1
 vim.g.rust_recommended_style = 0
 
 if vim.g.neovide or vim.g.goneovim then
-	-- vim.opt.guifont = "VictorMono Nerd Font Mono:h8"
-	-- vim.opt.guifont = "CaskaydiaCove Nerd Font Mono:h8.5"
-	-- vim.opt.guifont = "scientifica Nerd Font:h16"
 	vim.opt.guifont = "JetBrainsMono Nerd Font Mono:h9"
-	-- vim.opt.guifont = "JuliaMono:h9"
-	vim.opt.expandtab = false
 	vim.g.neovide_cursor_vfx_mode = "torpedo"
 	vim.g.neovide_cursor_antialiasing = true
 else
 	vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+	vim.api.nvim_set_hl(0, "NormalNC", { bg = "none" })
 	vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 end
 
@@ -52,5 +48,3 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 	group = some_group,
 })
--- vim.cmd.hi("Normal guibg=NONE ctermbg=NONE")
--- vim.cmd.hi("NonText guibg=NONE ctermbg=NONE")

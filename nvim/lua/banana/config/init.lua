@@ -13,6 +13,7 @@ require("banana.config.todo")
 require("banana.config.vimtex")
 require("banana.config.flutter")
 require("banana.config.formatter")
+require("banana.config.zen_mode")
 
 -- no config --
 require("colorizer").setup()

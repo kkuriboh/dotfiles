@@ -27,6 +27,7 @@ nbind({
 	{ "<leader>-", ":vertical resize -10<CR>" },
 	{ "<leader>+", ":vertical resize +10<CR>" },
 	{ "<leader>f", ":Format<CR>" },
+	{ "<leader>z", ":ZenMode<CR>" },
 	{ "<C-v>", ":vsplit | Telescope find_files<CR>" },
 	{ "<C-s>", ":split | Telescope find_files<CR>" },
 	{ "<C-t>", ":terminal<CR>" },

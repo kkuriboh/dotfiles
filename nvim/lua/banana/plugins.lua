@@ -28,7 +28,7 @@ return require("packer").startup(function()
 	use("alaviss/nim.nvim")
 	use("folke/todo-comments.nvim")
 	use("akinsho/flutter-tools.nvim")
-	-- use("adelarsq/neofsharp.vim")
+	use("folke/zen-mode.nvim")
 	use("ionide/Ionide-vim")
 	use({
 		"VonHeikemen/lsp-zero.nvim",
