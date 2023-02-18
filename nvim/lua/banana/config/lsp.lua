@@ -1,5 +1,6 @@
 local lsp = require("lsp-zero")
 local ih = require("inlay-hints")
+local lsp_util = require("lspconfig").util
 
 lsp.preset({
 	name = "minimal",
@@ -10,63 +11,57 @@ lsp.preset({
 
 lsp.ensure_installed({
 	"tsserver",
+	"denols",
 	"rust_analyzer",
 	"clangd",
 	"fsautocomplete",
-	"sumneko_lua",
+	"lua_ls",
 })
 
 lsp.configure("tsserver", {
-	on_attach = function(c, b)
-		ih.on_attach(c, b)
-	end,
+	root_dir = lsp_util.root_pattern("package.json"),
 	settings = {
-		javascript = {
-			inlayHints = {
-				includeInlayEnumMemberValueHints = true,
-				includeInlayFunctionLikeReturnTypeHints = true,
-				includeInlayFunctionParameterTypeHints = true,
-				includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
-				includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-				includeInlayPropertyDeclarationTypeHints = true,
-				includeInlayVariableTypeHints = true,
-			},
-		},
 		typescript = {
 			inlayHints = {
-				includeInlayEnumMemberValueHints = true,
-				includeInlayFunctionLikeReturnTypeHints = true,
+				includeInlayParameterNameHints = "all",
+				includeInlayParameterNameHintsWhenArgumentMatchesName = false,
 				includeInlayFunctionParameterTypeHints = true,
-				includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
-				includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-				includeInlayPropertyDeclarationTypeHints = true,
 				includeInlayVariableTypeHints = true,
+				includeInlayPropertyDeclarationTypeHints = true,
+				includeInlayFunctionLikeReturnTypeHints = true,
+				includeInlayEnumMemberValueHints = true,
+			},
+		},
+	},
+	init_options = {
+		lint = true,
+	},
+	single_file_support = false,
+})
+
+lsp.configure("denols", {
+	root_dir = lsp_util.root_pattern("deno.json", "deno.jsonc"),
+	init_options = {
+		lint = true,
+	},
+})
+
+lsp.configure("lua_ls", {
+	settings = {
+		Lua = {
+			diagnostics = {
+				globals = { "vim" },
+			},
+			hint = {
+				enable = true,
 			},
 		},
 	},
 })
 
-lsp.configure("rust_analyzer", {
-	tools = {
-		on_initialized = function()
-			ih.set_all()
-		end,
-		inlay_hints = {
-			auto = false,
-		},
-	},
-	server = {
-		on_attach = function(c, b)
-			ih.on_attach(c, b)
-		end,
-	},
-})
+lsp.on_attach(function(c, b)
+	ih.on_attach(c, b)
+end)
 
-lsp.setup({
-	eol = {
-		right_align = true,
-	},
-})
-
+lsp.setup()
 ih.setup()
-vim.lsp.set_log_level("debug")
